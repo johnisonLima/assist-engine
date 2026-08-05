@@ -45,6 +45,7 @@ Toda implementação do Assist Engine deverá respeitar os seguintes princípios
 * Facilidade para testes.
 * Escalabilidade horizontal.
 * Componentes substituíveis por meio de contratos.
+* Cada requisição é atendida por uma única estratégia de execução, escolhida pelo Decision Engine.
 
 Esses princípios possuem prioridade sobre decisões tecnológicas específicas.
 
