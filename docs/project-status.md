@@ -70,7 +70,7 @@ As prioridades abaixo indicam impacto na consistência entre o estado documentad
 
 | Prioridade | Pendência observada | Evidência |
 |---|---|---|
-| Alta | Alinhar o contrato do `ResponseBuilder` entre código e arquitetura. | `system/src/core/pipeline/response_builder.py` retorna `Context`; `docs/architecture/04 - components/11-response-builder.md` define saída `Response`. |
+| Alta | Alinhar o contrato do `ResponseBuilder` entre código e arquitetura. | `system/src/core/pipeline/response_builder.py` retorna `Context`; `docs/architecture/04-components/11-response-builder.md` define saída `Response`. |
 | Alta | Esclarecer e alinhar o papel do Orchestrator e a orquestração por contratos. | O Orchestrator atual apenas formata uma resposta e não recebe Pipeline ou outros componentes por contrato; a ADR-011 e a documentação do Orchestrator descrevem coordenação mais ampla. |
 | Média | Definir terminologia/contrato de `Pipeline Steps` versus `Middleware`. | A ADR-008 usa `Pipeline Steps`; a implementação e seus testes usam `Middleware`. A relação entre os termos não está explicitada no código consultado. |
 | Média | Completar a ADR-010 ou esclarecer sua relação com a ADR-006. | `ADR-010-tools-as-capabilities.md` está vazio; a ADR-006 registra uma decisão sobre o Sistema de Tools. |

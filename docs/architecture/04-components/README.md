@@ -29,7 +29,7 @@ Cada arquivo descreve apenas um componente, permitindo evolução independente d
 A estrutura da documentação é composta pelos seguintes arquivos:
 
 ```text
-components/
+04-components/
 │
 ├── README.md
 ├── 01-overview.md
