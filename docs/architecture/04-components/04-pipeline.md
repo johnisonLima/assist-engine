@@ -96,24 +96,40 @@ O que muda é o contexto associado à requisição.
 
 ---
 
-# 7. Funcionamento
+# 7. Funcionamento com PipelineSteps
 
-O Pipeline é composto por uma sequência ordenada de etapas independentes.
+O Pipeline é composto por uma sequência ordenada de `PipelineStep` independentes. Cada `PipelineStep` executa uma responsabilidade técnica e retorna o `Context` que será recebido pela etapa seguinte.
 
-Cada etapa executa apenas uma responsabilidade técnica.
+O Pipeline controla a ordem de execução e a propagação do `Context`.
+
+Em uma visão resumida do fluxo ponta a ponta — não da responsabilidade interna do Pipeline:
+
+```text
+Request
+  ↓
+Context Builder
+  ↓
+PipelineStep 1 → PipelineStep 2 → ... → PipelineStep N
+  ↓
+Response Builder
+  ↓
+Response
+```
+
+Essa representação simplificada omite a coordenação do Orchestrator e a estratégia de execução entre o Pipeline e o Response Builder. O fluxo completo está detalhado em `03-request-flow.md`.
 
 ```mermaid
 flowchart LR
 
 A[Entrada]
 
---> B[Etapa 1]
+--> B[PipelineStep 1]
 
---> C[Etapa 2]
+--> C[PipelineStep 2]
 
---> D[Etapa 3]
+--> D[PipelineStep 3]
 
---> E[Etapa N]
+--> E[PipelineStep N]
 
 --> F[Orchestrator]
 ```
@@ -126,11 +142,11 @@ Essa organização favorece modularidade, reutilização e facilidade de manuten
 
 ---
 
-# 8. Possíveis Etapas
+# 8. Possíveis PipelineSteps
 
 A arquitetura não define quais etapas devem existir.
 
-Cada aplicação pode compor seu próprio Pipeline.
+Cada aplicação pode compor seu próprio Pipeline com as etapas técnicas necessárias.
 
 Entre as etapas previstas estão:
 
@@ -175,7 +191,7 @@ Pipeline
 --> Validation
 ```
 
-Cada etapa deve possuir responsabilidade única e ser reutilizável sempre que possível.
+Cada `PipelineStep` deve possuir responsabilidade única e ser reutilizável sempre que possível.
 
 Essa organização evita a criação de componentes monolíticos e facilita a evolução incremental do sistema.
 

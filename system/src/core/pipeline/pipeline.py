@@ -1,35 +1,35 @@
 from collections.abc import Sequence
 
 from core.domain.context import Context
-from core.pipeline.exceptions import MiddlewareError
-from core.pipeline.middleware import Middleware
+from core.pipeline.exceptions import PipelineStepError
+from core.pipeline.pipeline_step import PipelineStep
 from core.pipeline.logging import logger
 
 
 class Pipeline:
-    def __init__(self, middlewares: Sequence[Middleware]):
-        self._middlewares = middlewares
+    def __init__(self, steps: Sequence[PipelineStep]):
+        self._steps = steps
 
     def execute(self, context: Context) -> Context:
         current_context = context
 
         logger.info("Pipeline started")
 
-        for middleware in self._middlewares:
+        for step in self._steps:
             logger.info(
-                "Executing middleware: %s",
-                middleware.__class__.__name__,
+                "Executing PipelineStep: %s",
+                step.__class__.__name__,
             )
 
             try:
-                current_context = middleware.execute(current_context)
+                current_context = step.execute(current_context)
             except Exception as exc:
                 logger.exception(
-                    "Middleware failed: %s",
-                    middleware.__class__.__name__,
+                    "PipelineStep failed: %s",
+                    step.__class__.__name__,
                 )
-                raise MiddlewareError(
-                    f"Middleware '{middleware.__class__.__name__}' failed"
+                raise PipelineStepError(
+                    f"PipelineStep '{step.__class__.__name__}' failed"
                 ) from exc
 
         logger.info("Pipeline completed")

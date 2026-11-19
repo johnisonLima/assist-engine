@@ -79,7 +79,7 @@ ITool
 Pipeline
         │
         ▼
-IPipelineStep
+PipelineStep
 ```
 
 ```text

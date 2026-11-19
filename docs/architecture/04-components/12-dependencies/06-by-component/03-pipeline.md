@@ -40,7 +40,7 @@ O Pipeline pode conhecer apenas os seguintes elementos.
 | ----------------------------------- | -------- | ---------------------------------------------------- |
 | Adapter Layer                       | Direta   | Recebimento da requisição normalizada.               |
 | Orchestrator                        | Contrato | Encaminhamento da requisição preparada.              |
-| Pipeline Steps                      | Contrato | Execução das etapas técnicas de preparação.          |
+| PipelineSteps                      | Contrato | Execução das etapas técnicas de preparação.          |
 | Modelos internos da requisição      | Contrato | Enriquecimento e validação da requisição.            |
 | Serviços técnicos de infraestrutura | Contrato | Operações técnicas necessárias durante a preparação. |
 
@@ -83,7 +83,7 @@ Pipeline
 Orchestrator
 ```
 
-Internamente, comunica-se apenas com seus próprios Pipeline Steps.
+Internamente, comunica-se apenas com seus próprios PipelineSteps.
 
 Nenhuma comunicação direta com executores é permitida.
 
@@ -106,19 +106,19 @@ IOrchestrator
 Pipeline
         │
         ▼
-IPipelineStep
+PipelineStep
 ```
 
 ```text
-Pipeline Step
+PipelineStep
         │
         ▼
 Request
 ```
 
-Os Pipeline Steps nunca devem conhecer uns aos outros.
+Os PipelineSteps nunca devem conhecer uns aos outros.
 
-Cada Step comunica-se apenas com o Pipeline por meio do contrato estabelecido.
+Cada PipelineStep comunica-se apenas com o Pipeline por meio do contrato estabelecido.
 
 ---
 
@@ -131,11 +131,11 @@ flowchart LR
 
 Adapter --> Pipeline -->
 
-PipelineStep1["Pipeline Step 1"] -->
+PipelineStep1["PipelineStep 1"] -->
 
-PipelineStep2["Pipeline Step 2"] -->
+PipelineStep2["PipelineStep 2"] -->
 
-PipelineStepN["Pipeline Step N"] -->
+PipelineStepN["PipelineStep N"] -->
 
 Orchestrator
 
@@ -157,7 +157,7 @@ O Pipeline deve obedecer às seguintes restrições.
 * Nunca construir respostas.
 * Nunca alterar o fluxo arquitetural.
 
-Cada Pipeline Step deve possuir responsabilidade única e executar exclusivamente tarefas técnicas.
+Cada PipelineStep deve possuir responsabilidade única e executar exclusivamente tarefas técnicas.
 
 ---
 
@@ -167,7 +167,7 @@ O Pipeline concentra todas as responsabilidades técnicas necessárias para prep
 
 Ao limitar rigorosamente suas dependências, impede que decisões de negócio ou estratégias de execução sejam incorporadas às etapas de preparação.
 
-Essa separação preserva a simplicidade do componente e facilita sua evolução incremental por meio da adição ou remoção de Pipeline Steps independentes.
+Essa separação preserva a simplicidade do componente e facilita sua evolução incremental por meio da adição ou remoção de PipelineSteps independentes.
 
 ---
 
@@ -176,7 +176,7 @@ Essa separação preserva a simplicidade do componente e facilita sua evolução
 Antes de adicionar uma nova dependência ao Pipeline, responda às seguintes perguntas:
 
 * Essa dependência participa da preparação técnica da requisição?
-* Ela pode ser implementada como um Pipeline Step?
+* Ela pode ser implementada como um PipelineStep?
 * Ela introduz conhecimento sobre regras de negócio?
 * Ela toma alguma decisão arquitetural?
 * Ela depende de um executor?

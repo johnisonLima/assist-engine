@@ -56,11 +56,11 @@ Cada extensão é incorporada por meio de contratos definidos pelo Core.
 
 ---
 
-# Pipeline Steps
+# PipelineSteps
 
-O Pipeline pode ser expandido pela adição de novos Pipeline Steps.
+O Pipeline pode ser expandido pela adição de novos PipelineSteps.
 
-Cada Step representa uma única responsabilidade técnica e participa da preparação da requisição antes de sua entrada no Core.
+Cada `PipelineStep` representa uma única responsabilidade técnica e participa da preparação da requisição antes de sua entrada no Core.
 
 Exemplos:
 
@@ -70,7 +70,7 @@ Exemplos:
 * auditoria;
 * métricas.
 
-A inclusão de novos Steps não altera o funcionamento dos demais componentes.
+A inclusão de novos `PipelineStep`s não altera o funcionamento dos demais componentes.
 
 ---
 

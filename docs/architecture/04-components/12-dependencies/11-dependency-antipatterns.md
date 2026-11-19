@@ -40,7 +40,7 @@ AI Engine
 IAIProvider
 ```
 
-Esse princípio aplica-se igualmente a Tools, Business Modules, Pipeline Steps e demais extensões da arquitetura.
+Esse princípio aplica-se igualmente a Tools, Business Modules, PipelineSteps e demais extensões da arquitetura.
 
 ---
 

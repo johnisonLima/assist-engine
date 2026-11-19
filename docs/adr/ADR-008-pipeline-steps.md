@@ -2,7 +2,7 @@
 
 ## Título
 
-Pipeline composto por Pipeline Steps
+Pipeline composto por PipelineSteps
 
 ## Contexto
 
@@ -22,15 +22,15 @@ Cada etapa executaria diversas responsabilidades relacionadas.
 
 Cada etapa dependeria diretamente da execução e implementação da etapa anterior.
 
-**3. Pipeline composto por Pipeline Steps especializados**
+**3. Pipeline composto por PipelineSteps especializados**
 
 Cada etapa executa apenas uma responsabilidade técnica, podendo ser adicionada, removida ou reorganizada sem impactar as demais.
 
 ## Decisão
 
-O pipeline da aplicação será composto exclusivamente por **Pipeline Steps**.
+O pipeline da aplicação será composto exclusivamente por **PipelineSteps**.
 
-Cada Pipeline Step deve obrigatoriamente:
+Cada PipelineStep deve obrigatoriamente:
 
 - possuir responsabilidade única;
 - ser independente dos demais;
@@ -40,9 +40,13 @@ Cada Pipeline Step deve obrigatoriamente:
 - devolver a mesma instância da requisição enriquecida para a próxima etapa;
 - não interromper o fluxo arquitetural, salvo em situações excepcionais, como falhas de autenticação, autorização, validações impeditivas ou erros irrecuperáveis.
 
-Os Pipeline Steps não devem conhecer a implementação dos demais Steps, apenas o contrato do pipeline.
+Os PipelineSteps não devem conhecer a implementação dos demais PipelineSteps, apenas o contrato do pipeline.
 
 A ordem de execução será definida pela composição do pipeline e não por dependências internas entre os Steps.
+
+## Evolução futura: Middleware
+
+`Middleware` é um conceito distinto de `PipelineStep`. Um Middleware poderá ser introduzido futuramente caso exista uma necessidade concreta de interceptar, envolver ou decorar a execução do Pipeline ou de uma etapa, por exemplo, compondo comportamentos antes e depois da execução. Não há uma abstração Middleware independente nesta decisão; PipelineSteps não são aliases de Middleware.
 
 ## Consequências
 
@@ -50,13 +54,13 @@ A ordem de execução será definida pela composição do pipeline e não por de
 
 ✔ Baixo acoplamento entre as etapas.
 
-✔ Alta coesão, com cada Step possuindo uma única responsabilidade.
+✔ Alta coesão, com cada PipelineStep possuindo uma única responsabilidade.
 
-✔ Facilidade para adicionar, remover ou reorganizar Steps.
+✔ Facilidade para adicionar, remover ou reorganizar PipelineSteps.
 
 ✔ Melhor testabilidade, permitindo testes unitários isolados para cada etapa.
 
-✔ Maior reutilização de Steps em diferentes pipelines.
+✔ Maior reutilização de PipelineSteps em diferentes pipelines.
 
 ✔ Arquitetura compatível com os princípios SOLID, especialmente o Single Responsibility Principle (SRP) e o Open/Closed Principle (OCP).
 
@@ -64,7 +68,7 @@ A ordem de execução será definida pela composição do pipeline e não por de
 
 #### Negativas
 
-✖ Um número maior de Steps pode aumentar a quantidade de classes do projeto.
+✖ Um número maior de PipelineSteps pode aumentar a quantidade de classes do projeto.
 
 ✖ A definição da ordem correta do pipeline passa a ser responsabilidade da composição arquitetural.
 

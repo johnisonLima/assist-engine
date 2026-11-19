@@ -33,7 +33,7 @@ O Core do Assist Engine **não deve possuir conhecimento sobre qualquer domínio
 Sua responsabilidade é fornecer exclusivamente a infraestrutura necessária para o funcionamento do sistema, incluindo componentes como:
 
 - Pipeline;
-- Pipeline Steps;
+- PipelineSteps;
 - Decision Engine;
 - Tool Engine;
 - Agentes;

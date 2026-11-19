@@ -1,11 +1,11 @@
 import pytest
 
 from core.domain.context import Context
-from core.pipeline.middleware import Middleware
+from core.pipeline.pipeline_step import PipelineStep
 from core.pipeline.pipeline import Pipeline
-from core.pipeline.exceptions import MiddlewareError
+from core.pipeline.exceptions import PipelineStepError
 
-class FirstMiddleware(Middleware):
+class FirstPipelineStep(PipelineStep):
     def __init__(self, received_contexts: list[Context]):
         self.received_contexts = received_contexts
 
@@ -14,7 +14,7 @@ class FirstMiddleware(Middleware):
         return context
 
 
-class SecondMiddleware(Middleware):
+class SecondPipelineStep(PipelineStep):
     def __init__(self, received_contexts: list[Context]):
         self.received_contexts = received_contexts
 
@@ -23,15 +23,15 @@ class SecondMiddleware(Middleware):
         return context
 
 
-def test_pipeline_executes_middlewares_in_order():
+def test_pipeline_executes_steps_in_order():
     execution_order = []
 
-    class First(Middleware):
+    class First(PipelineStep):
         def execute(self, context: Context) -> Context:
             execution_order.append("first")
             return context
 
-    class Second(Middleware):
+    class Second(PipelineStep):
         def execute(self, context: Context) -> Context:
             execution_order.append("second")
             return context
@@ -45,13 +45,13 @@ def test_pipeline_executes_middlewares_in_order():
     assert result is context
 
 
-def test_pipeline_propagates_context_between_middlewares():
+def test_pipeline_propagates_context_between_steps():
     received_contexts = []
 
     pipeline = Pipeline(
         [
-            FirstMiddleware(received_contexts),
-            SecondMiddleware(received_contexts),
+            FirstPipelineStep(received_contexts),
+            SecondPipelineStep(received_contexts),
         ]
     )
 
@@ -62,12 +62,12 @@ def test_pipeline_propagates_context_between_middlewares():
     assert received_contexts == [context, context]
     assert result is context
 
-class FailingMiddleware(Middleware):
+class FailingPipelineStep(PipelineStep):
     def execute(self, context: Context) -> Context:
         raise ValueError("Something went wrong")
 
 
-class MiddlewareAfterFailure(Middleware):
+class PipelineStepAfterFailure(PipelineStep):
     def __init__(self, executed: list[bool]):
         self.executed = executed
 
@@ -76,30 +76,30 @@ class MiddlewareAfterFailure(Middleware):
         return context
 
 
-def test_pipeline_raises_middleware_error_when_middleware_fails():
-    pipeline = Pipeline([FailingMiddleware()])
+def test_pipeline_raises_pipeline_step_error_when_step_fails():
+    pipeline = Pipeline([FailingPipelineStep()])
     context = Context()
 
-    with pytest.raises(MiddlewareError) as error:
+    with pytest.raises(PipelineStepError) as error:
         pipeline.execute(context)
 
-    assert "FailingMiddleware" in str(error.value)
+    assert "FailingPipelineStep" in str(error.value)
     assert isinstance(error.value.__cause__, ValueError)
 
 
-def test_pipeline_stops_execution_after_middleware_failure():
+def test_pipeline_stops_execution_after_step_failure():
     executed = []
 
     pipeline = Pipeline(
         [
-            FailingMiddleware(),
-            MiddlewareAfterFailure(executed),
+            FailingPipelineStep(),
+            PipelineStepAfterFailure(executed),
         ]
     )
 
     context = Context()
 
-    with pytest.raises(MiddlewareError):
+    with pytest.raises(PipelineStepError):
         pipeline.execute(context)
 
     assert executed == []

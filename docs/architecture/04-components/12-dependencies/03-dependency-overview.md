@@ -215,7 +215,7 @@ O mesmo princípio aplica-se a:
 * AI Providers;
 * Tools;
 * Business Modules;
-* Pipeline Steps;
+* PipelineSteps;
 * demais extensões da arquitetura.
 
 Essa abordagem reduz o acoplamento e facilita substituições futuras.

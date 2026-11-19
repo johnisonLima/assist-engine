@@ -1,16 +1,16 @@
 from core.domain.context import Context
 from core.pipeline.context_builder import ContextBuilder
-from core.pipeline.middleware import Middleware
+from core.pipeline.pipeline_step import PipelineStep
 from core.pipeline.pipeline import Pipeline
 from core.pipeline.response_builder import ResponseBuilder
 
 
-class PipelineMiddleware(Middleware):
+class ExamplePipelineStep(PipelineStep):
     def __init__(self, executed: list[str]):
         self.executed = executed
 
     def execute(self, context: Context) -> Context:
-        self.executed.append("middleware")
+        self.executed.append("pipeline_step")
         return context
 
 
@@ -20,7 +20,7 @@ def test_pipeline_full_flow():
     context_builder = ContextBuilder()
     pipeline = Pipeline(
         [
-            PipelineMiddleware(executed),
+            ExamplePipelineStep(executed),
         ]
     )
     response_builder = ResponseBuilder()
@@ -30,6 +30,6 @@ def test_pipeline_full_flow():
     response = response_builder.build(result)
 
     assert isinstance(context, Context)
-    assert executed == ["middleware"]
+    assert executed == ["pipeline_step"]
     assert result is context
     assert response is context

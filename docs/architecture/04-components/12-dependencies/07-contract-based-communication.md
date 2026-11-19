@@ -102,7 +102,7 @@ A arquitetura define contratos para representar as principais capacidades do sis
 | `IOrchestrator`    | Coordenação do fluxo arquitetural.                  |
 | `IDecisionEngine`  | Seleção da estratégia de execução.                  |
 | `IExecutor`        | Execução de uma estratégia.                         |
-| `IPipelineStep`    | Execução de uma etapa técnica do Pipeline.          |
+| `PipelineStep`    | Execução de uma etapa técnica do Pipeline.          |
 | `ITool`            | Representação de uma capacidade do sistema.         |
 | `IAIProvider`      | Comunicação com modelos de Inteligência Artificial. |
 | `IBusinessModule`  | Representação de um domínio de negócio.             |

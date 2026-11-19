@@ -16,7 +16,7 @@ Este documento apresenta o planejamento geral do Assist Engine, organizado em se
 
 - **Estado:** Concluída
 - **Pergunta:** O fluxo interno consegue ser organizado em etapas independentes?
-- **Missões:** Pipeline; Middleware; Context Builder; Response Builder; Logging; tratamento de exceções.
+- **Missões:** Pipeline; PipelineStep; Context Builder; Response Builder; Logging; tratamento de exceções.
 - **Entrega esperada:** Pipeline totalmente funcional.
 
 ## Fase 2 — Inteligência Artificial

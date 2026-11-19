@@ -13,9 +13,9 @@ O desenvolvimento está em estágio inicial. O repositório registra como conclu
 
 | Sprint | Estado | Evidência e observações |
 |---|---|---|
-| Sprint 1 — Core | Concluída | Estado informado no histórico de planejamento fornecido para este documento; a implementação contém `Message`, `Context`, `Response` e `Orchestrator`. |
-| Sprint 2 — Pipeline | Concluída | Estado informado no histórico de planejamento fornecido; o repositório contém `Pipeline`, contrato `Middleware`, `ContextBuilder`, `ResponseBuilder` e testes de Pipeline. |
-| Próximas Sprints | Planejamento não localizado | Não há diretório `docs/sprints/`, arquivos de Sprint rastreados ou plano de Sprints no repositório. O README contém um roadmap geral, mas não atribui os itens a Sprints nem define datas. |
+| Sprint 1 — Core | Concluída | Registro em [sprint-01-core.md](sprints/sprint-01-core.md); a implementação contém `Message`, `Context`, `Response` e `Orchestrator`. |
+| Sprint 2 — Pipeline | Concluída | Registro em [sprint-02-pipeline.md](sprints/sprint-02-pipeline.md); o repositório contém `Pipeline`, contrato `PipelineStep`, `ContextBuilder`, `ResponseBuilder` e testes de Pipeline. |
+| Sprints 3 a 15 | Planejadas | Planejamento detalhado em [docs/sprints/README.md](sprints/README.md), sem datas ou estimativas. |
 
 ## 3. Componentes implementados
 
@@ -27,11 +27,11 @@ Estados abaixo refletem a existência de implementação em `system/src/`; “pa
 | Domain — `Response` | Implementado | Modelo imutável com conteúdo e UUID; rejeita conteúdo vazio ou composto apenas por espaços. |
 | Domain — `Context` | Implementado, mínimo | Dataclass imutável sem campos, conforme o contexto de execução inicialmente vazio descrito na ADR-012. |
 | Application — `Orchestrator` | Implementado, mínimo | Recebe `Message` e `Context` e retorna uma resposta fixa de confirmação que inclui o conteúdo da mensagem. Não coordena ainda o fluxo amplo descrito na arquitetura. |
-| Pipeline | Implementado, inicial | Executa uma sequência ordenada de `Middleware`, propaga o `Context` e converte falhas em `MiddlewareError`. |
-| Middleware | Contrato implementado | Define `execute(Context) -> Context`. Não há implementação concreta de Middleware em `system/src/`; as implementações de exemplo estão nos testes. |
+| Pipeline | Implementado, inicial | Executa uma sequência ordenada de `PipelineStep`, propaga o `Context` e converte falhas em `PipelineStepError`. |
+| PipelineStep | Contrato implementado | Define `execute(Context) -> Context`. Não há implementação concreta de PipelineStep em `system/src/`; as implementações de exemplo estão nos testes. |
 | `ContextBuilder` | Implementado, mínimo | Cria um `Context` vazio. |
 | `ResponseBuilder` | Implementado, placeholder | Retorna o mesmo `Context` recebido. A arquitetura especifica que o componente deve construir e retornar uma `Response`. |
-| Logging e exceções do Pipeline | Implementados | O Pipeline registra início, execução, falha e conclusão; expõe `PipelineError` e `MiddlewareError`. |
+| Logging e exceções do Pipeline | Implementados | O Pipeline registra início, execução, falha e conclusão; expõe `PipelineError` e `PipelineStepError`. |
 | Entry point — `system/src/main.py` | Implementado, demonstrativo | Cria uma mensagem, invoca o Orchestrator e imprime a resposta. Também contém uma função de teste manual executada ao importar/executar o módulo. |
 
 Não foram encontrados em `system/src/` implementações de Communication Layer/Adapter, Decision Engine, Rule Engine, Tool Engine/Tools, AI Engine/provedores, memória, RAG, Business Modules ou integração FastAPI. A ADR-003 registra FastAPI como decisão arquitetural, mas isso não comprova implementação do framework.
@@ -44,7 +44,7 @@ Os arquivos existentes cobrem:
 
 - criação de `Context` pelo `ContextBuilder`;
 - execução do Pipeline em ordem, propagação do contexto, encapsulamento de falhas e interrupção após falha;
-- fluxo de integração entre `ContextBuilder`, Pipeline, middleware de teste e `ResponseBuilder`.
+- fluxo de integração entre `ContextBuilder`, Pipeline, PipelineStep de teste e `ResponseBuilder`.
 
 Não há arquivos de teste específicos para os modelos de Domain ou para o Application/Orchestrator. `system/src/main.py` contém uma verificação manual do Orchestrator, mas ela não está organizada como teste pytest em `system/tests/`.
 
@@ -72,7 +72,6 @@ As prioridades abaixo indicam impacto na consistência entre o estado documentad
 |---|---|---|
 | Alta | Alinhar o contrato do `ResponseBuilder` entre código e arquitetura. | `system/src/core/pipeline/response_builder.py` retorna `Context`; `docs/architecture/04-components/11-response-builder.md` define saída `Response`. |
 | Alta | Esclarecer e alinhar o papel do Orchestrator e a orquestração por contratos. | O Orchestrator atual apenas formata uma resposta e não recebe Pipeline ou outros componentes por contrato; a ADR-011 e a documentação do Orchestrator descrevem coordenação mais ampla. |
-| Média | Definir terminologia/contrato de `Pipeline Steps` versus `Middleware`. | A ADR-008 usa `Pipeline Steps`; a implementação e seus testes usam `Middleware`. A relação entre os termos não está explicitada no código consultado. |
 | Média | Completar a ADR-010 ou esclarecer sua relação com a ADR-006. | `ADR-010-tools-as-capabilities.md` está vazio; a ADR-006 registra uma decisão sobre o Sistema de Tools. |
 | Média | Atualizar a documentação de estrutura para refletir a implementação atual. | `docs/architecture/07-project-structure.md` descreve `contracts/` e `src/tests/`, e afirma que ainda não há contratos concretos; a implementação atual contém `core/pipeline/`, os testes estão em `system/tests/` e não existe `core/contracts/`. |
 | Média | Criar cobertura automatizada específica para Domain e Application, se esses comportamentos permanecerem parte do escopo. | Não há testes correspondentes em `system/tests/`; o único exercício do Orchestrator é uma verificação manual em `system/src/main.py`. |

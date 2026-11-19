@@ -41,7 +41,7 @@ O Orchestrator não deve:
 
 A resolução das implementações será responsabilidade da camada de composição da aplicação, normalmente realizada por meio de um contêiner de injeção de dependências.
 
-Esse princípio aplica-se a todos os componentes coordenados pelo Orchestrator, incluindo Pipeline Steps, Tools, Providers, Engines, Agentes e quaisquer futuras extensões da plataforma.
+Esse princípio aplica-se a todos os componentes coordenados pelo Orchestrator, incluindo PipelineSteps, Tools, Providers, Engines, Agentes e quaisquer futuras extensões da plataforma.
 
 ### Consequências
 
